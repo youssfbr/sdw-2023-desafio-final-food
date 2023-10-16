@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +16,12 @@ import java.net.URI;
 public class CategoryController {
 
     private final ICategoryService categoryService;
+
+    @GetMapping
+    public ResponseEntity<List<Category>> findAll() {
+        List<Category> categoryList = categoryService.findAll();
+        return ResponseEntity.ok(categoryList);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> findById(@PathVariable Long id) {

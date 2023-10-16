@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -14,6 +15,12 @@ import java.util.NoSuchElementException;
 public class CategoryService implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
+    }
 
     @Override
     @Transactional(readOnly = true)
