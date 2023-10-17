@@ -42,17 +42,37 @@ public class CategoryService implements ICategoryService {
     @Transactional
     public CategoryResponseDTO create(CategoryRequestDTO categoryToCreate) {
 
-        if (categoryToCreate.getId() != null && categoryRepository.existsById(categoryToCreate.getId())) {
-            throw new IllegalArgumentException("This Category ID already exists.");
-        }
-
         if (categoryRepository.existsByName(categoryToCreate.getName())) {
             throw new IllegalArgumentException("This Category Name already exists.");
         }
 
-        Category categorytoSave = new Category(categoryToCreate);
-        Category categorySaved = categoryRepository.save(categorytoSave);
+        Category categoryToSave = new Category(categoryToCreate);
+        categoryToSave.setId(null);
+        Category categorySaved = categoryRepository.save(categoryToSave);
 
         return new CategoryResponseDTO(categorySaved);
     }
+
+    @Override
+    @Transactional
+    public CategoryResponseDTO update(Long id, CategoryRequestDTO categoryDTOToUpdate) {
+
+        existsCategory(id);
+
+        if (categoryRepository.existsByName(categoryDTOToUpdate.getName())) {
+            throw new IllegalArgumentException("This Category Name already exists.");
+        }
+
+        Category categoryToUpdate = new Category(categoryDTOToUpdate);
+        categoryToUpdate.setId(id);
+        Category categoryUpdated = categoryRepository.save(categoryToUpdate);
+
+        return new CategoryResponseDTO(categoryUpdated);
+    }
+
+    private Category existsCategory(Long id) {
+        return categoryRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException(MESSAGE_ID_NOT_FOUND + id));
+    }
+
 }

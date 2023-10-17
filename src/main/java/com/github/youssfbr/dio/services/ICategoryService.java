@@ -9,4 +9,5 @@ public interface ICategoryService {
     List<CategoryResponseDTO> findAll();
     CategoryResponseDTO findById(Long id);
     CategoryResponseDTO create(CategoryRequestDTO categoryToCreate);
+    CategoryResponseDTO update(Long id, CategoryRequestDTO categoryDTOToUpdate);
 }
