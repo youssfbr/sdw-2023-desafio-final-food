@@ -1,12 +1,12 @@
 package com.github.youssfbr.dio.services;
 
-import com.github.youssfbr.dio.domain.models.Category;
-import com.github.youssfbr.dio.dtos.CategoryDTO;
+import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
+import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 
 import java.util.List;
 
 public interface ICategoryService {
-    List<CategoryDTO> findAll();
-    CategoryDTO findById(Long id);
-    Category create(Category categoryToCreate);
+    List<CategoryResponseDTO> findAll();
+    CategoryResponseDTO findById(Long id);
+    CategoryResponseDTO create(CategoryRequestDTO categoryToCreate);
 }

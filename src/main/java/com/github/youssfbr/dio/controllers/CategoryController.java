@@ -1,7 +1,7 @@
 package com.github.youssfbr.dio.controllers;
 
-import com.github.youssfbr.dio.domain.models.Category;
-import com.github.youssfbr.dio.dtos.CategoryDTO;
+import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
+import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,24 +19,27 @@ public class CategoryController {
     private final ICategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> findAll() {
-        List<CategoryDTO> categoryList = categoryService.findAll();
+    public ResponseEntity<List<CategoryResponseDTO>> findAll() {
+        List<CategoryResponseDTO> categoryList = categoryService.findAll();
         return ResponseEntity.ok(categoryList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
-        CategoryDTO categoryDTO = categoryService.findById(id);
-        return ResponseEntity.ok(categoryDTO);
+    public ResponseEntity<CategoryResponseDTO> findById(@PathVariable Long id) {
+        CategoryResponseDTO categoryResponseDTO = categoryService.findById(id);
+        return ResponseEntity.ok(categoryResponseDTO);
     }
 
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody Category categoryToCreate) {
-        Category categoryCreated = categoryService.create(categoryToCreate);
+    public ResponseEntity<CategoryResponseDTO> create(@RequestBody CategoryRequestDTO categoryToCreate) {
+
+        CategoryResponseDTO categoryCreated = categoryService.create(categoryToCreate);
+
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(categoryCreated.getId())
                 .toUri();
+
         return ResponseEntity.created(location).body(categoryCreated);
     }
 

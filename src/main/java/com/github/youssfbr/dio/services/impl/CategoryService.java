@@ -2,7 +2,8 @@ package com.github.youssfbr.dio.services.impl;
 
 import com.github.youssfbr.dio.domain.models.Category;
 import com.github.youssfbr.dio.domain.repositories.ICategoryRepository;
-import com.github.youssfbr.dio.dtos.CategoryDTO;
+import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
+import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import com.github.youssfbr.dio.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,26 +21,27 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll() {
+    public List<CategoryResponseDTO> findAll() {
 
         return categoryRepository.findAll()
                 .stream()
-                .map(CategoryDTO::new)
+                .map(CategoryResponseDTO::new)
                 .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CategoryDTO findById(Long id) {
+    public CategoryResponseDTO findById(Long id) {
 
         return categoryRepository.findById(id)
-                .map(CategoryDTO::new)
+                .map(CategoryResponseDTO::new)
                 .orElseThrow(() -> new ResourceNotFoundException(MESSAGE_ID_NOT_FOUND + id));
     }
 
     @Override
     @Transactional
-    public Category create(Category categoryToCreate) {
+    public CategoryResponseDTO create(CategoryRequestDTO categoryToCreate) {
+
         if (categoryToCreate.getId() != null && categoryRepository.existsById(categoryToCreate.getId())) {
             throw new IllegalArgumentException("This Category ID already exists.");
         }
@@ -47,6 +49,10 @@ public class CategoryService implements ICategoryService {
         if (categoryRepository.existsByName(categoryToCreate.getName())) {
             throw new IllegalArgumentException("This Category Name already exists.");
         }
-        return categoryRepository.save(categoryToCreate);
+        
+        Category categorytoSave = new Category(categoryToCreate);
+        Category categorySaved = categoryRepository.save(categorytoSave);
+
+        return new CategoryResponseDTO(categorySaved);
     }
 }

@@ -8,13 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDTO {
+public class CategoryRequestDTO {
     private Long id;
     private String name;
 
-    public CategoryDTO(Category entity) {
+    public CategoryRequestDTO(Category entity) {
         this.id = entity.getId();
         this.name = entity.getName();
     }
-
 }

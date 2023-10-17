@@ -1,6 +1,7 @@
 package com.github.youssfbr.dio.domain.models;
 
-import com.github.youssfbr.dio.dtos.CategoryDTO;
+import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
+import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,12 @@ public class Category {
 
     // TO DO List<Product> products;
 
-    public Category(CategoryDTO categoryDTO) {
+    public Category(CategoryResponseDTO categoryResponseDTO) {
+        this.id = Long.parseLong(categoryResponseDTO.getId());
+        this.name = categoryResponseDTO.getName();
+    }
+
+    public Category(CategoryRequestDTO categoryDTO) {
         this.id = categoryDTO.getId();
         this.name = categoryDTO.getName();
     }
