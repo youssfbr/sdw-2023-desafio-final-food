@@ -1,6 +1,7 @@
 package com.github.youssfbr.dio.controllers;
 
 import com.github.youssfbr.dio.domain.models.Category;
+import com.github.youssfbr.dio.dtos.CategoryDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ public class CategoryController {
     private final ICategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        List<Category> categoryList = categoryService.findAll();
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<CategoryDTO> categoryList = categoryService.findAll();
         return ResponseEntity.ok(categoryList);
     }
 

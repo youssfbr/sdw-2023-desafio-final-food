@@ -2,6 +2,7 @@ package com.github.youssfbr.dio.services.impl;
 
 import com.github.youssfbr.dio.domain.models.Category;
 import com.github.youssfbr.dio.domain.repositories.ICategoryRepository;
+import com.github.youssfbr.dio.dtos.CategoryDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,12 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> findAll() {
+
+        return categoryRepository.findAll()
+                .stream()
+                .map(CategoryDTO::new)
+                .toList();
     }
 
     @Override
