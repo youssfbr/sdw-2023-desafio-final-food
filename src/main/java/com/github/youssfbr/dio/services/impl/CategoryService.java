@@ -70,6 +70,12 @@ public class CategoryService implements ICategoryService {
         return new CategoryResponseDTO(categoryUpdated);
     }
 
+    @Override
+    public void delete(Long id) {
+        existsCategory(id);
+        categoryRepository.deleteById(id);
+    }
+
     private Category existsCategory(Long id) {
         return categoryRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException(MESSAGE_ID_NOT_FOUND + id));

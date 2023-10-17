@@ -4,6 +4,7 @@ import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
 import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -49,6 +50,12 @@ public class CategoryController {
         CategoryResponseDTO categoryUpdated = categoryService.update(id, categoryToCreate);
 
         return ResponseEntity.ok(categoryUpdated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        categoryService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
