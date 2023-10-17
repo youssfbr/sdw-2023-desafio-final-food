@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +22,12 @@ public class Category {
     @Column(unique = true)
     private String name;
 
+    @Column(updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
+
     // TO DO List<Product> products;
 
     public Category(CategoryResponseDTO categoryResponseDTO) {
@@ -30,6 +38,16 @@ public class Category {
     public Category(CategoryRequestDTO categoryDTO) {
         this.id = categoryDTO.getId();
         this.name = categoryDTO.getName();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 
 }
