@@ -17,16 +17,33 @@ public class ExceptionHandle {
             ResourceNotFoundException e,
             HttpServletRequest request) {
 
-        HttpStatus notFound = HttpStatus.NOT_FOUND;
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
         StandardError error = StandardError.builder()
                 .timestamp(Instant.now())
-                .status(notFound.value())
+                .status(status.value())
                 .error(e.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
-        return ResponseEntity.status(notFound).body(error);
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<StandardError> illegalArgumentException (
+            IllegalArgumentException e,
+            HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        StandardError error = StandardError.builder()
+                .timestamp(Instant.now())
+                .status(status.value())
+                .error(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(status).body(error);
     }
 
 }

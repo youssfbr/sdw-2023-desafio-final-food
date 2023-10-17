@@ -49,7 +49,7 @@ public class CategoryService implements ICategoryService {
         if (categoryRepository.existsByName(categoryToCreate.getName())) {
             throw new IllegalArgumentException("This Category Name already exists.");
         }
-        
+
         Category categorytoSave = new Category(categoryToCreate);
         Category categorySaved = categoryRepository.save(categorytoSave);
 
