@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ICategoryService {
     List<CategoryDTO> findAll();
-    Category findById(Long id);
+    CategoryDTO findById(Long id);
     Category create(Category categoryToCreate);
 }

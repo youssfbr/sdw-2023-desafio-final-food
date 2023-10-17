@@ -4,18 +4,19 @@ import com.github.youssfbr.dio.domain.models.Category;
 import com.github.youssfbr.dio.domain.repositories.ICategoryRepository;
 import com.github.youssfbr.dio.dtos.CategoryDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
+import com.github.youssfbr.dio.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
+    private static final String MESSAGE_ID_NOT_FOUND = "Resource not found with ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -29,8 +30,11 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Category findById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public CategoryDTO findById(Long id) {
+
+        return categoryRepository.findById(id)
+                .map(CategoryDTO::new)
+                .orElseThrow(() -> new ResourceNotFoundException(MESSAGE_ID_NOT_FOUND + id));
     }
 
     @Override
