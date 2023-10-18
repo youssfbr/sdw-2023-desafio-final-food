@@ -7,6 +7,8 @@ import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import com.github.youssfbr.dio.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,14 @@ public class CategoryService implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
     private static final String MESSAGE_ID_NOT_FOUND = "Resource not found with ID ";
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CategoryResponseDTO> findAllPaged(Pageable pageable) {
+        return categoryRepository
+                .findAll(pageable)
+                .map(CategoryResponseDTO::new);
+    }
 
     @Override
     @Transactional(readOnly = true)

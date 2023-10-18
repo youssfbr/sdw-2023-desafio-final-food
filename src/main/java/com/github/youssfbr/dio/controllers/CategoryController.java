@@ -4,6 +4,8 @@ import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
 import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,11 @@ import java.util.List;
 public class CategoryController {
 
     private final ICategoryService categoryService;
+
+    @GetMapping("/paged")
+    public Page<CategoryResponseDTO> paged(Pageable pageable) {
+        return categoryService.findAllPaged(pageable);
+    }
 
     @GetMapping
     public ResponseEntity<List<CategoryResponseDTO>> findAll() {
