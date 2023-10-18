@@ -5,8 +5,10 @@ import com.github.youssfbr.dio.domain.repositories.ICategoryRepository;
 import com.github.youssfbr.dio.dtos.CategoryRequestDTO;
 import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import com.github.youssfbr.dio.services.ICategoryService;
+import com.github.youssfbr.dio.services.exceptions.DatabaseException;
 import com.github.youssfbr.dio.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -82,8 +84,13 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void delete(Long id) {
-        existsCategory(id);
-        categoryRepository.deleteById(id);
+        try {
+            existsCategory(id);
+            categoryRepository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Integrity violation.");
+        }
     }
 
     private Category existsCategory(Long id) {
