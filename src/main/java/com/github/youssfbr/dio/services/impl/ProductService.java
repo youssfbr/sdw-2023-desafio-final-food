@@ -1,6 +1,8 @@
 package com.github.youssfbr.dio.services.impl;
 
+import com.github.youssfbr.dio.domain.models.Category;
 import com.github.youssfbr.dio.domain.models.Product;
+import com.github.youssfbr.dio.domain.repositories.ICategoryRepository;
 import com.github.youssfbr.dio.domain.repositories.IProductRepository;
 import com.github.youssfbr.dio.dtos.ProductRequestDTO;
 import com.github.youssfbr.dio.dtos.ProductResponseDTO;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +22,7 @@ import java.util.List;
 public class ProductService implements IProductService {
 
     private final IProductRepository productRepository;
+    private final ICategoryRepository categoryRepository;
     private static final String MESSAGE_ID_NOT_FOUND = "Resource not found with ID ";
 
     @Override
@@ -57,7 +61,12 @@ public class ProductService implements IProductService {
         productToSave.setId(null);
         Product productSaved = productRepository.save(productToSave);
 
-        return new ProductResponseDTO(productSaved);
+        List<Category> categories = getCategories(productSaved);
+
+        productSaved.getCategories().clear();
+        productSaved.getCategories().addAll(categories);
+
+        return new ProductResponseDTO(productSaved, productSaved.getCategories());
     }
 
     @Override
@@ -68,9 +77,11 @@ public class ProductService implements IProductService {
 
         Product productToUpdate = new Product(productDTOToUpdate);
         productToUpdate.setId(id);
-        Product categoryUpdated = productRepository.save(productToUpdate);
+        Product productUpdated = productRepository.save(productToUpdate);
 
-        return new ProductResponseDTO(categoryUpdated);
+        getCategories(productUpdated);
+
+        return new ProductResponseDTO(productUpdated, productUpdated.getCategories());
     }
 
     @Override
@@ -82,6 +93,17 @@ public class ProductService implements IProductService {
     private Product existsProduct(Long id) {
         return productRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException(MESSAGE_ID_NOT_FOUND + id));
+    }
+
+    private List<Category> getCategories(Product productSaved) {
+
+        List<Category> categories = new ArrayList<>();
+
+        productSaved.getCategories().forEach(x -> {
+            Category category = categoryRepository.getReferenceById(x.getId());
+            categories.add(category);
+        });
+        return categories;
     }
 
 }

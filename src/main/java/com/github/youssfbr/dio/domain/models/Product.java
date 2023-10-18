@@ -4,7 +4,9 @@ import com.github.youssfbr.dio.dtos.ProductRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -14,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tb_product")
+@EqualsAndHashCode(of = "id")
 public class Product {
 
     @Id
@@ -37,12 +40,11 @@ public class Product {
     private Set<Category> categories = new HashSet<>();
 
     public Product(ProductRequestDTO productRequestDTO) {
-        id = productRequestDTO.getId();
-        name = productRequestDTO.getName();
-        description = productRequestDTO.getDescription();
-        price = productRequestDTO.getPrice();
-        imgUrl = productRequestDTO.getImgUrl();
-        date = productRequestDTO.getDate();
+
+        BeanUtils.copyProperties(productRequestDTO, this);
+
+        categories.clear();
+        productRequestDTO.getCategories().forEach(category -> categories.add(category));
     }
 
 }

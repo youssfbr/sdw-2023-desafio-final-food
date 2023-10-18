@@ -5,6 +5,7 @@ import com.github.youssfbr.dio.domain.models.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,12 +26,7 @@ public class ProductResponseDTO {
     private List<CategoryResponseDTO> categories = new ArrayList<>();
 
     public ProductResponseDTO(Product entity) {
-        id = entity.getId();
-        name = entity.getName();
-        description = entity.getDescription();
-        price = entity.getPrice();
-        imgUrl = entity.getImgUrl();
-        date = entity.getDate();
+        BeanUtils.copyProperties(entity, this);
     }
 
     public ProductResponseDTO(Product entity, Set<Category> categories) {

@@ -5,7 +5,9 @@ import com.github.youssfbr.dio.dtos.CategoryResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.time.Instant;
 
@@ -13,6 +15,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tb_category")
+@EqualsAndHashCode(of = "id")
 public class Category {
 
     @Id
@@ -29,13 +32,12 @@ public class Category {
     private Instant updatedAt;
 
     public Category(CategoryResponseDTO categoryResponseDTO) {
-        this.id = Long.parseLong(categoryResponseDTO.getId());
-        this.name = categoryResponseDTO.getName();
+        id = Long.parseLong(categoryResponseDTO.getId());
+        name = categoryResponseDTO.getName();
     }
 
     public Category(CategoryRequestDTO categoryDTO) {
-        this.id = categoryDTO.getId();
-        this.name = categoryDTO.getName();
+        BeanUtils.copyProperties(categoryDTO, this);
     }
 
     @PrePersist
