@@ -28,8 +28,6 @@ public class Category {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
 
-    // TO DO List<Product> products;
-
     public Category(CategoryResponseDTO categoryResponseDTO) {
         this.id = Long.parseLong(categoryResponseDTO.getId());
         this.name = categoryResponseDTO.getName();

@@ -1,5 +1,6 @@
 package com.github.youssfbr.dio.domain.models;
 
+import com.github.youssfbr.dio.dtos.ProductRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,5 +34,15 @@ public class Product {
     @JoinTable(name = "tb_product_category",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    Set<Category> categories = new HashSet<>();
+    private Set<Category> categories = new HashSet<>();
+
+    public Product(ProductRequestDTO productRequestDTO) {
+        id = productRequestDTO.getId();
+        name = productRequestDTO.getName();
+        description = productRequestDTO.getDescription();
+        price = productRequestDTO.getPrice();
+        imgUrl = productRequestDTO.getImgUrl();
+        date = productRequestDTO.getDate();
+    }
+
 }
